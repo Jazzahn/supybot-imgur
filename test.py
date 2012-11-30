@@ -28,10 +28,25 @@
 
 ###
 
-from supybot.test import *
+#from supybot.test import *
 
-class ImgurTestCase(PluginTestCase):
-    plugins = ('Imgur',)
+#class ImgurTestCase(PluginTestCase):
+#    plugins = ('Imgur',)
+
+
+#Py.test tests by Bear
+from plugin import Imgur
+
+url_list = [
+    {"type": "album", "url": "http://imgur.com/a/q1WIO", "hash": "q1WIO"},
+    {"type": "gallery", "url": "http://imgur.com/gallery/XFegc", "hash": "XFegc"},
+    {"type": "image", "url": "http://i.imgur.com/jgONW.jpg", "hash": "jgONW"}
+]
+
+def test_imgur_parse_url():
+    for imgur_dict in url_list:
+        imgur_hash = Imgur._parse_url(imgur_dict["url"])
+        assert imgur_dict["hash"] == imgur_hash
 
 
 # vim:set shiftwidth=4 tabstop=4 expandtab textwidth=79:
