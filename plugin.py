@@ -42,10 +42,11 @@ class Imgur(callbacks.Plugin):
     This should describe *how* to use this plugin."""
     threaded = True
 
-    def _parse_url(self, full_url):
+    @classmethod
+    def _parse_url(cls, full_url):
         parsed_url = requests.utils.urlparse(full_url)
-        image_hash = parsed_url.path.split("/")[-1].split(".")[0]
-        return image_hash
+        imgur_hash = parsed_url.path.split("/")[-1].split(".")[0]
+        return imgur_hash
 
 
 Class = Imgur
