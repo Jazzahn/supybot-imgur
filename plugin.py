@@ -57,11 +57,57 @@ class Imgur(callbacks.Plugin):
     
     @classmethod
     def _parse_url(cls, full_url):
+        """
+        Takes a URL and returns the Imgur hash
+        """
         parsed_url = requests.utils.urlparse(full_url)
         imgur_hash = parsed_url.path.split("/")[-1].split(".")[0]
         return imgur_hash
 
-        
+    @classmethod
+    def _extract_url(cls, text):
+        prefix_map = ["https://", "http://", "imgur.com"]
+        for prefix in prefix_map:
+            if prefix in text:
+                url = text[text.find(prefix):].split(" ")[0]
+                return url
+        return None
+
+    def _build_reply_string(self, json):
+        title = ""
+        reddit = ""
+        views = 0
+        try:
+            title = ircutils.bold(json["title"])
+        except:
+            pass
+        try:
+            views = ircutils.bold(json["views"])
+        except:
+            views = ircutils.bold('0')
+        try:
+            reddit = ircutils.bold(json["reddit"])
+        except:
+            reddit = ircutils.bold("n/a")
+
+        return ('Title: %s  Views: %s  Reddit: %s  ' % (title, views, reddit))
+
+    def _lookUpImgur(self, irc, msg):
+        (recipients, text) = msg.args
+        url = self._extract_url(text)
+        imgur_hash = self._parse_url(url)
+        imgur_json = self._lookUpHash(imgur_hash)
+        reply_string = self._build_reply_string(imgur_json)
+
+        irc.reply(reply_string, prefixNick=False)
+
+    def doPrivmsg(self, irc, msg):
+        (recipients, text) = msg.args
+        if "imgur.com" in text:
+            self._lookUpImgur(irc, msg)
+        else:
+            pass
+
 Class = Imgur
 
 
