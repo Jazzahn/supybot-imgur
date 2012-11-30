@@ -45,5 +45,6 @@ Imgur = conf.registerPlugin('Imgur')
 # conf.registerGlobalValue(Imgur, 'someConfigVariableName',
 #     registry.Boolean(False, """Help for someConfigVariableName."""))
 
+conf.registerGlobalValue(Imgur, 'developer_key', registry.String('', "developer_key", private=True))
 
 # vim:set shiftwidth=4 tabstop=4 expandtab textwidth=79:

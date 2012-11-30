@@ -61,6 +61,34 @@ class Imgur(callbacks.Plugin):
         imgur_hash = parsed_url.path.split("/")[-1].split(".")[0]
         return imgur_hash
 
+    @classmethod
+    def _uploadImage(cls, key, url):
+        uploadService = "http://api.imgur.com/2/upload.json"
+        headers = {
+            'key': key,
+            'image': url
+        }
+        try:
+            response = requests.post(uploadService, params=headers)
+            if response.status_code == 200:
+                return response.json['upload']['links']['original']
+            else:
+                return None
+        except:
+            return None
+
+    @classmethod
+    def imgur(cls, irc, msg, args):
+        """imgur <url> returns a imgur url for the image passed to it."""
+        if args[0] is None or args[0] == '':
+            irc.reply(__doc__)
+        elif self.registryValue('developer_key') is None:
+            irc.reply("Set developer_key")
+        elif "http://" in args[0] or "https://" in args[0]:
+            key = self.registryValue('developer_key')
+            irc.reply(self._uploadImage(key, args[0]))
+        else:
+            irc.reply("Something Bad Happend.")
         
 Class = Imgur
 
