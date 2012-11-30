@@ -128,8 +128,7 @@ class Imgur(callbacks.Plugin):
         except:
             return None
 
-    @classmethod
-    def imgur(cls, irc, msg, args):
+    def imgur(self, irc, msg, args):
         """imgur <url> returns a imgur url for the image passed to it."""
         if args[0] is None or args[0] == '':
             irc.reply(__doc__)
