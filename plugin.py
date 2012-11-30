@@ -42,13 +42,26 @@ class Imgur(callbacks.Plugin):
     This should describe *how* to use this plugin."""
     threaded = True
 
+    def _lookUpHash(self, imgur_hash):
+        albumService = 'http://imgur.com/gallery/%s.json'
+        try:
+            if imgur_hash is None or imgur_hash == '':
+                return None
+            response = requests.get(albumService % imgur_hash)
+            if response.status_code == 200:
+                return response.json['data']['image']
+            else:
+                return None
+        except:
+            return None
+    
     @classmethod
     def _parse_url(cls, full_url):
         parsed_url = requests.utils.urlparse(full_url)
         imgur_hash = parsed_url.path.split("/")[-1].split(".")[0]
         return imgur_hash
 
-
+        
 Class = Imgur
 
 
