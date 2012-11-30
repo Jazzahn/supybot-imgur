@@ -34,13 +34,27 @@ import supybot.plugins as plugins
 import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
 
+import requests
 
 class Imgur(callbacks.Plugin):
     """Add the help for "@plugin help Imgur" here
     This should describe *how* to use this plugin."""
     threaded = True
 
+    def _lookUpHash(self, imgur_hash):
+        albumService = 'http://imgur.com/gallery/%s.json'
+        try:
+            if imgur_hash is None or imgur_hash == '':
+                return None
+            response = requests.get(albumService % imgur_hash)
+            if response.status_code == 200:
+                return response.json['data']['image']
+            else:
+                return None
+        except:
+            return None
 
+        
 Class = Imgur
 
 
