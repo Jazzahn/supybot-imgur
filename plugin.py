@@ -34,11 +34,18 @@ import supybot.plugins as plugins
 import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
 
+import requests
+
 
 class Imgur(callbacks.Plugin):
     """Add the help for "@plugin help Imgur" here
     This should describe *how* to use this plugin."""
     threaded = True
+
+    def _parse_url(self, full_url):
+        parsed_url = requests.utils.urlparse(full_url)
+        image_hash = parsed_url.path.split("/")[-1].split(".")[0]
+        return image_hash
 
 
 Class = Imgur
