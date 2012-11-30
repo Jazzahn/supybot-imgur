@@ -93,13 +93,17 @@ class Imgur(callbacks.Plugin):
         return ('Title: %s  Views: %s  Reddit: %s  ' % (title, views, reddit))
 
     def _lookUpImgur(self, irc, msg):
+        """
+        Main function of the Imgur plugin. Pass it and
+        """
         (recipients, text) = msg.args
         url = self._extract_url(text)
         imgur_hash = self._parse_url(url)
         imgur_json = self._lookUpHash(imgur_hash)
-        reply_string = self._build_reply_string(imgur_json)
+        if imgur_json:
+            reply_string = self._build_reply_string(imgur_json)
 
-        irc.reply(reply_string, prefixNick=False)
+            irc.reply(reply_string, prefixNick=False)
 
     def doPrivmsg(self, irc, msg):
         (recipients, text) = msg.args
