@@ -34,13 +34,26 @@ import supybot.plugins as plugins
 import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
 
+import sqlachemy import create_engine
+
 import requests
 
+import googl
 
 class Imgur(callbacks.Plugin):
     """Add the help for "@plugin help Imgur" here
     This should describe *how* to use this plugin."""
     threaded = True
+
+    def __init__(self, irc):
+        self.shortenDbEngine =
+create_engine('mysql+mysqldb:://%s:%s@%s/%s' %
+(self.registryValue('shorten_mysql_user'), self.registryValue('shorten_mysql_pass'),
+self.registryValue('shorten_mysql_server'),
+self.registryValue('shorten_mysql_db')), pool_size = 2, pool_recycle=3600,
+echo=False)
+        self.shorten = googl.Googl(self.shortenDbEngine,
+self.registryValue('shorten_api_key'))
 
     def _lookUpHash(self, imgur_hash):
         albumService = 'http://imgur.com/gallery/%s.json'
